@@ -1,6 +1,6 @@
 function LoadReport() {
   console.log("---Report loaded: " + report.length);
-
+//window.IgnoredColumns=[];
   var groupBy = function (xs, key) {
     return xs.reduce(function (rv, x) {
       (rv[x[key]] = rv[x[key]] || []).push(x);
@@ -14,8 +14,34 @@ function LoadReport() {
   var entities = Object.keys(window.resultByEntity);
   summary.text("Entities count: " + entities.length + ", Total records count: " + report.length);
   console.log("Found entities: " + Object.keys(window.resultByEntity).join(", "));
-
   renderUi(Object.keys(window.resultByEntity));
+  renderAvailableCols(window.resultByEntity[entities[0]][0]);
+}
+
+function renderAvailableCols(obj) {
+  //debugger;
+  window.availableColumns = Object.keys(obj);
+  let columns = $('#columns');
+  window.availableColumns.forEach(element => {
+    var tab = $('<li class="nav-item"></li>')
+      .append($('<input type="checkbox" class="fieldName" checked id="' + element + '" name="' + element + '" onChange="onColumnChange(this.checked,this)">' + element + '</input>'));
+    columns.append(tab);
+  });
+}
+
+function onColumnChange(val, control) {
+  //debugger;
+  //window.IgnoredColumns = window.IgnoredColumns || [];
+  if (val) {
+    window.availableColumns.push(control.name);
+  } else {
+    window.availableColumns = window.availableColumns.filter(function (x) {
+      return x != control.name;
+    });
+  }
+  if (window.prevActive) {
+    renderTable(window.prevEnt);
+  }
 }
 
 function renderUi(entities) {
@@ -30,7 +56,6 @@ function renderUi(entities) {
     var tab = $('<li class="nav-item"></li>').append($('<a id="a' + element + '" class="nav-link" href="#" onclick="onSelectedEntityChange(this.text,this)"></a>').text(element));
     menu.append(tab);
   });
-
   dropdown.prop('selectedIndex', 0);
 }
 
@@ -41,11 +66,15 @@ function onSelectedEntityChange(e, a) {
   $('#' + window.prevActive).removeClass("active")
   a.classList.add("active");
   window.prevActive = a.id;
+  window.prevEnt = e;
   renderTable(e);
 }
 function renderTable(entName) {
   var data = window.resultByEntity[entName];
   var columns = Object.keys(data[0]);
+  columns = columns.filter(x=>{
+    return window.availableColumns.includes(x);
+  });
   let tHead = $('#resultTable > thead > tr');
   tHead.empty();
   tHead.append('<td class="sticky-top" scope="col">#</td>');
@@ -57,19 +86,16 @@ function renderTable(entName) {
   tBody.empty();
   data.forEach((record, index) => {
     var npp = index + 1;
-
     var appendText = function (text) {
-      tBody.append('<tr>' + '<th scope="row">' + npp + '</th>' + text + '</tr>');
+      var tr = $('<tr>' + '<th scope="row">' + npp + '</th>' + text + '</tr>');
+      tBody.append(tr);
     }
-    var insertTable = function (table) {
-      tBody.append(table);
-    }
-    generateRow(record, columns, appendText, insertTable);
+    generateRow(record, columns, appendText);
   });
   $('#spinner').hide();
 }
 
-function generateRow(record, columns, appendText, insertTable) {
+function generateRow(record, columns, appendText) {
   var result = [];
   var table = [];
   var keys = [];
@@ -81,57 +107,58 @@ function generateRow(record, columns, appendText, insertTable) {
       if (typeof val[keys[0]] !== "object") {
         var vals = [];
         val.forEach(k => {
-          vals.push('<span class="badge badge-primary">'+k+ '</span>'); //
+          vals.push('<span class="badge badge-primary">' + k + '</span>'); //
         });
         val = vals.join(", \n")
-      } else if (val !=null && val[0] !=null ) {
-
+      } else if (val != null && val[0] != null) {
         var vals = [];
         console.log(val);
         keys = Object.keys(val[0]);
-        /* val.forEach(d=>{
-           keys.forEach(f=>{
-             vals.push(f+": "+d[f]);
-           })
-         });*/
         table.push(val);
+        //debugger;
+        val = generateInnerTable(val, keys).html();
       }
     }
-
+    //is link
     if (typeof val == "string" && val.includes('://')) {
       val = "<a href=" + val + ">" + val + "</a>";
-    }else if(val !=null && !Array.isArray(val)){
-      val = '<span class="badge badge-primary">'+val+ '</span>'; //
+    } else if (val != null && !Array.isArray(val)) {
+      // val = '<span class="badge badge-primary">' + val + '</span>'; //
     }
-    else if(val ==null){
-      val = '<span class="badge badge-danger">'+val+ '</span>'; //
+    //is null
+    else if (val == null) {
+      val = '<span class="badge badge-danger">' + val + '</span>'; //
     }
-    
+
     result.push('<td>' + val + '</td>');
   });
-  /*if(table.length >0){
-    return insertTable( generateInnerTable(table[0],keys));
-  }*/
-
-  return appendText(result.join(""));
+  // debugger;
+  appendText(result.join(""));
+  if (table.length > 0) {
+    //insertTable( generateInnerTable(table[0],keys));
+  }
 }
 
 function generateInnerTable(data) {
-  var table = $('<table class="table"></table>');
-  var tHeader = $('<thead class=""></thead>').append("<tr></tr>");
-  var keys = Object.keys(data[0]);
+  var cont = $('<div></div>');
+  var table = $('<table class="table table-striped"></table>');
+  var tHeader = $('<thead class="thead-light"></thead>');//.append("<tr></tr>");
+  var keys = Object.keys(data[0]).sort();
   keys.forEach(k => {
-    tHeader.append('<td class="sticky-top" scope="col">' + k + '</td>');
+    tHeader.append('<td scope="col">' + k + '</td>');
   });
   table.append(tHeader);
-  var tBody = $('<tbody class=""></tbody>');
-  data.forEach(r => {
-    debugger;
-    keys.forEach(f => {
-      tBody.append('<td>' + '<th scope="row">' + r[f] + '</th>' + "" + '</td>');
-    });
 
+  var tBody = $('<tbody></tbody>');
+  data.forEach(r => {
+    //debugger;
+    var row = $('<tr></tr>');
+    keys.forEach(f => {
+      row.append('<th>' + r[f] + '</th>');
+    });
+    tBody.append(row);
   });
   table.append(tBody);
-  return table;
+  cont.append(table);
+  return cont;
 }

@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <script src="main.js"></script>
-  <script src="Report.js"></script>
+  <script src="../Report.js"></script>
   <title>Connector report viewer</title>
   <style>
     .sticky-top {
@@ -19,6 +19,10 @@
     }
     #tabs{
       margin-bottom: 20px;
+    }
+    .fieldName {
+      margin-right: 10px;
+      margin-left: 10px;
     }
   </style>
 </head>
@@ -46,7 +50,10 @@
   <label for="locality-dropdown">Entity:</label>
   <select id="locality-dropdown" name="locality" onchange="onSelectedEntityChange(this.value,this)">
   </select>
+  <label for="columns">Columns:</label>
+  
   <ul id="tabs" class="nav nav-pills navbar-light bg-light"></ul>
+  <ul id="columns" class="nav nav-pills navbar-light bg-light"></ul>
   <div id="resultTableCont">
     <table class="table" id="resultTable">
       <thead>
