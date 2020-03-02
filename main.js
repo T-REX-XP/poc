@@ -24,19 +24,19 @@ function renderAvailableCols(obj) {
   let columns = $('#columns');
   window.availableColumns.forEach(element => {
     var tab = $('<li class="nav-item"></li>')
-      .append($('<input type="checkbox" class="fieldName" checked id="' + element + '" name="' + element + '" onChange="onColumnChange(this.checked,this)">' + element + '</input>'));
+      .append($('<input type="checkbox" class="fieldName" checked id="' + element + '" name="' + element + '" onChange="onColumnChange(this.checked,this.id)">' + element + '</input>'));
     columns.append(tab);
   });
 }
 
-function onColumnChange(val, control) {
+function onColumnChange(val, name) {
   //debugger;
   //window.IgnoredColumns = window.IgnoredColumns || [];
   if (val) {
-    window.availableColumns.push(control.name);
+    window.availableColumns.push(name);
   } else {
     window.availableColumns = window.availableColumns.filter(function (x) {
-      return x != control.name;
+      return x != name;
     });
   }
   if (window.prevActive) {
@@ -161,4 +161,28 @@ function generateInnerTable(data) {
   table.append(tBody);
   cont.append(table);
   return cont;
+}
+
+function selectAll(){
+  debugger;
+  var entities = Object.keys(window.resultByEntity);
+  var columns=  Object.keys(window.resultByEntity[entities[0]][0]);
+  window.availableColumns =columns ;
+  if (window.prevActive) {
+    renderTable(window.prevEnt);
+  }
+}
+
+function deselectAll(){
+  debugger;
+}
+
+function selectColumns(columns){
+  debugger;
+  window.availableColumns = window.availableColumns.filter(function (x) {
+    return columns.includes(x);
+  });
+  if (window.prevActive) {
+    renderTable(window.prevEnt);
+  }
 }
