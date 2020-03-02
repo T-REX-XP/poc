@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <script src="main.js"></script>
-  <script src="Report.js"></script>
+  <script src="../Report.js"></script>
   <title>Connector report viewer</title>
   <style>
     .sticky-top {
@@ -47,8 +47,8 @@
     <p id="summary"></p>
   </div>
 
-  <label for="locality-dropdown">Entity:</label>
-  <select id="locality-dropdown" name="locality" onchange="onSelectedEntityChange(this.value,this)">
+  <label for="locality-dropdown" hidden>Entity:</label>
+  <select id="locality-dropdown" hidden name="locality" onchange="onSelectedEntityChange(this.value,this)">
   </select>
   <label for="columns">Columns:</label>
   <input type="button" value="Deselect All" onclick="deselectAll()"/>
