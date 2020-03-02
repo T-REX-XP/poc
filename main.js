@@ -53,7 +53,7 @@ function renderUi(entities) {
   entities.forEach(element => {
     var option = $('<option></option>').attr('value', element).text(element + " (" + window.resultByEntity[element].length + ")");
     dropdown.append(option);
-    var tab = $('<li class="nav-item"></li>').append($('<a id="a' + element + '" class="nav-link" href="#" onclick="onSelectedEntityChange(this.text,this)"></a>').text(element));
+    var tab = $('<li class="nav-item"></li>').append($('<a id="' + element + '" class="nav-link" href="#" onclick="onSelectedEntityChange(this.id,this)"></a>').text(element+" ("+ window.resultByEntity[element].length+')'));
     menu.append(tab);
   });
   dropdown.prop('selectedIndex', 0);
