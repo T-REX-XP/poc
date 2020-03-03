@@ -141,8 +141,8 @@ function generateRow(record, columns, appendText) {
 
 function generateInnerTable(data) {
   var cont = $('<div></div>');
-  var table = $('<table class="table table-striped"></table>');
-  var tHeader = $('<thead class="thead-light"></thead>');//.append("<tr></tr>");
+  var table = $('<table id="tbMetadata" class="table table-striped tableMetadata"></table>');
+  var tHeader = $('<thead class="thead-light tableHeaderMetadata"></thead>');//.append("<tr></tr>");
   var keys = Object.keys(data[0]).sort();
   keys.forEach(k => {
     tHeader.append('<td scope="col">' + k + '</td>');
