@@ -1,6 +1,6 @@
 function LoadReport() {
   console.log("---Report loaded: " + report.length);
-//window.IgnoredColumns=[];
+  //window.IgnoredColumns=[];
   var groupBy = function (xs, key) {
     return xs.reduce(function (rv, x) {
       (rv[x[key]] = rv[x[key]] || []).push(x);
@@ -53,7 +53,7 @@ function renderUi(entities) {
   entities.forEach(element => {
     var option = $('<option></option>').attr('value', element).text(element + " (" + window.resultByEntity[element].length + ")");
     dropdown.append(option);
-    var tab = $('<li class="nav-item"></li>').append($('<a id="' + element + '" class="nav-link" href="#" onclick="onSelectedEntityChange(this.id,this)"></a>').text(element+" ("+ window.resultByEntity[element].length+')'));
+    var tab = $('<li class="nav-item"></li>').append($('<a id="' + element + '" class="nav-link" href="#" onclick="onSelectedEntityChange(this.id,this)"></a>').text(element + " (" + window.resultByEntity[element].length + ')'));
     menu.append(tab);
   });
   dropdown.prop('selectedIndex', 0);
@@ -72,7 +72,7 @@ function onSelectedEntityChange(e, a) {
 function renderTable(entName) {
   var data = window.resultByEntity[entName];
   var columns = Object.keys(data[0]);
-  columns = columns.filter(x=>{
+  columns = columns.filter(x => {
     return window.availableColumns.includes(x);
   });
   let tHead = $('#resultTable > thead > tr');
@@ -121,7 +121,7 @@ function generateRow(record, columns, appendText) {
     }
     //is link
     if (typeof val == "string" && val.includes('://')) {
-      val = "<a href=" + val + ">" + val + "</a>";
+      //val = "<a href=" + val + ">" + val + "</a>";
     } else if (val != null && !Array.isArray(val)) {
       // val = '<span class="badge badge-primary">' + val + '</span>'; //
     }
@@ -134,51 +134,79 @@ function generateRow(record, columns, appendText) {
   });
   // debugger;
   appendText(result.join(""));
-  if (table.length > 0) {
+  //if (table.length > 0) {
     //insertTable( generateInnerTable(table[0],keys));
-  }
+  //}
 }
 
-function generateInnerTable(data) {
-  var cont = $('<div></div>');
-  var table = $('<table id="tbMetadata" class="table table-striped tableMetadata"></table>');
-  var tHeader = $('<thead class="thead-light tableHeaderMetadata"></thead>');//.append("<tr></tr>");
-  var keys = Object.keys(data[0]).sort();
+function generateInnerTableHeader(table, keys){
+  var tHeader = $('<thead class="thead-light tableHeaderMetadata"></thead>');
+  //var keys = Object.keys(data[0]).sort();
   keys.forEach(k => {
     tHeader.append('<td scope="col">' + k + '</td>');
   });
   table.append(tHeader);
+}
+
+function generateInnerTable(data) {
+  var cont = $('<div></div>');
+  var table = $('<table id="tbMetadata" class="table table-striped tableMetadata"></table>');  
+  var keys = Object.keys(data[0]).sort();
+  generateInnerTableHeader(table,keys);
 
   var tBody = $('<tbody></tbody>');
-  data.forEach(r => {
-    //debugger;
-    var row = $('<tr></tr>');
-    keys.forEach(f => {
-      row.append('<th>' + r[f] + '</th>');
+  try{
+    data.forEach(r => {
+      //debugger;
+      var row = $('<tr></tr>');
+      if(r.InternalName =="documentbody"){
+        if(r.Value){
+          r.Value ='<span class="badge badge-primary">documentbnody' + '</span>';
+        }else{
+          r.Value ='<span class="badge badge-danger">null' + '</span>';
+        } 
+      }
+      else if(r.InternalName =="entityimage"){
+        if(r.Value){
+          r.Value ='<span class="badge badge-primary">entiyimage' + '</span>';
+        }else{
+          r.Value ='<span class="badge badge-danger">null' + '</span>';
+        }    
+      }
+  
+      keys.forEach(f => {
+          row.append('<th>' + r[f] + '</th>');
+      });
+      tBody.append(row);
     });
-    tBody.append(row);
-  });
+  }
+  catch(e){
+    console.log(e);
+    //debugger;
+  }
+ 
+
   table.append(tBody);
   cont.append(table);
   return cont;
 }
 
-function selectAll(){
-  debugger;
+function selectAll() {
+  //debugger;
   var entities = Object.keys(window.resultByEntity);
-  var columns=  Object.keys(window.resultByEntity[entities[0]][0]);
-  window.availableColumns =columns ;
+  var columns = Object.keys(window.resultByEntity[entities[0]][0]);
+  window.availableColumns = columns;
   if (window.prevActive) {
     renderTable(window.prevEnt);
   }
 }
 
-function deselectAll(){
-  debugger;
+function deselectAll() {
+ // debugger;
 }
 
-function selectColumns(columns){
-  debugger;
+function selectColumns(columns) {
+  //debugger;
   window.availableColumns = window.availableColumns.filter(function (x) {
     return columns.includes(x);
   });
