@@ -146,7 +146,7 @@ function generateInnerTable(data) {
       var row = $('<tr></tr>');
       if (r.InternalName == "documentbody" || r.InternalName == "body") {
         if (r.Value) {
-          r.Value = '<span class="badge badge-primary">documentbnody' + '</span>';
+          r.Value = '<span class="badge badge-primary">documentbody' + '</span>';
         } else {
           r.Value = '<span class="badge badge-danger">null' + '</span>';
         }
