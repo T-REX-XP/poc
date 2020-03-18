@@ -1,6 +1,5 @@
 function LoadReport() {
   console.log("---Report loaded: " + report.length);
-  //window.IgnoredColumns=[];
   var groupBy = function (xs, key) {
     return xs.reduce(function (rv, x) {
       (rv[x[key]] = rv[x[key]] || []).push(x);
@@ -19,7 +18,6 @@ function LoadReport() {
 }
 
 function renderAvailableCols(obj) {
-  //debugger;
   window.availableColumns = Object.keys(obj);
   let columns = $('#columns');
   window.availableColumns.forEach(element => {
@@ -30,8 +28,6 @@ function renderAvailableCols(obj) {
 }
 
 function onColumnChange(val, name) {
-  //debugger;
-  //window.IgnoredColumns = window.IgnoredColumns || [];
   if (val) {
     window.availableColumns.push(name);
   } else {
@@ -115,16 +111,11 @@ function generateRow(record, columns, appendText) {
         console.log(val);
         keys = Object.keys(val[0]);
         table.push(val);
-        //debugger;
         val = generateInnerTable(val, keys).html();
       }
     }
     //is link
-    if (typeof val == "string" && val.includes('://')) {
-      //val = "<a href=" + val + ">" + val + "</a>";
-    } else if (val != null && !Array.isArray(val)) {
-      // val = '<span class="badge badge-primary">' + val + '</span>'; //
-    }
+    if (typeof val == "string" && val.includes('://')) { } else if (val != null && !Array.isArray(val)) { }
     //is null
     else if (val == null) {
       val = '<span class="badge badge-danger">' + val + '</span>'; //
@@ -132,16 +123,11 @@ function generateRow(record, columns, appendText) {
 
     result.push('<td>' + val + '</td>');
   });
-  // debugger;
   appendText(result.join(""));
-  //if (table.length > 0) {
-    //insertTable( generateInnerTable(table[0],keys));
-  //}
 }
 
-function generateInnerTableHeader(table, keys){
+function generateInnerTableHeader(table, keys) {
   var tHeader = $('<thead class="thead-light tableHeaderMetadata"></thead>');
-  //var keys = Object.keys(data[0]).sort();
   keys.forEach(k => {
     tHeader.append('<td scope="col">' + k + '</td>');
   });
@@ -150,41 +136,39 @@ function generateInnerTableHeader(table, keys){
 
 function generateInnerTable(data) {
   var cont = $('<div></div>');
-  var table = $('<table id="tbMetadata" class="table table-striped tableMetadata"></table>');  
+  var table = $('<table id="tbMetadata" class="table table-striped tableMetadata"></table>');
   var keys = Object.keys(data[0]).sort();
-  generateInnerTableHeader(table,keys);
+  generateInnerTableHeader(table, keys);
 
   var tBody = $('<tbody></tbody>');
-  try{
+  try {
     data.forEach(r => {
-      //debugger;
       var row = $('<tr></tr>');
-      if(r.InternalName =="documentbody"){
-        if(r.Value){
-          r.Value ='<span class="badge badge-primary">documentbnody' + '</span>';
-        }else{
-          r.Value ='<span class="badge badge-danger">null' + '</span>';
-        } 
+      if (r.InternalName == "documentbody" || r.InternalName == "body") {
+        if (r.Value) {
+          r.Value = '<span class="badge badge-primary">documentbnody' + '</span>';
+        } else {
+          r.Value = '<span class="badge badge-danger">null' + '</span>';
+        }
       }
-      else if(r.InternalName =="entityimage"){
-        if(r.Value){
-          r.Value ='<span class="badge badge-primary">entiyimage' + '</span>';
-        }else{
-          r.Value ='<span class="badge badge-danger">null' + '</span>';
-        }    
+      else if (r.InternalName == "entityimage") {
+        if (r.Value) {
+          r.Value = '<span class="badge badge-primary">entiyimage' + '</span>';
+        } else {
+          r.Value = '<span class="badge badge-danger">null' + '</span>';
+        }
       }
-  
+
       keys.forEach(f => {
-          row.append('<th>' + r[f] + '</th>');
+        row.append('<th>' + r[f] + '</th>');
       });
       tBody.append(row);
     });
   }
-  catch(e){
+  catch (e) {
     console.log(e);
-    //debugger;
   }
- 
+
 
   table.append(tBody);
   cont.append(table);
@@ -192,7 +176,6 @@ function generateInnerTable(data) {
 }
 
 function selectAll() {
-  //debugger;
   var entities = Object.keys(window.resultByEntity);
   var columns = Object.keys(window.resultByEntity[entities[0]][0]);
   window.availableColumns = columns;
@@ -202,11 +185,9 @@ function selectAll() {
 }
 
 function deselectAll() {
- // debugger;
 }
 
 function selectColumns(columns) {
-  //debugger;
   window.availableColumns = window.availableColumns.filter(function (x) {
     return columns.includes(x);
   });
