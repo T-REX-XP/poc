@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+    <head> <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>EntityData-Schema-Validator</title>
+<script src="main.js"></script>
+<!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<style>
+    .formField{
+        display: inline-grid
+    }
+    * {
+  box-sizing: border-box;
+}
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.errorTableRow{
+    background-color: rosybrown;
+}
+.okTableRow{
+    background-color: #d3ffd8;
+}
+
+.jsonPreview{
+    overflow-y: scroll;
+    display:  none /*table-cell*/;
+}
+
+
+
+@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro");
+.json {
+  font-family: "Source Code Pro", monospace;
+  font-size: 16px;
+}
+.json > .json__item {
+  display: block;
+}
+
+.json__item {
+  display: none;
+  margin-top: 10px;
+  padding-left: 20px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.json__item--collapsible {
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+.json__item--collapsible::before {
+  content: "+";
+  position: absolute;
+  left: 5px;
+}
+.json__item--collapsible::after {
+  background-color: lightgrey;
+  content: "";
+  height: 100%;
+  left: 9px;
+  position: absolute;
+  top: 26px;
+  width: 1px;
+}
+.json__item--collapsible:hover > .json__key, .json__item--collapsible:hover > .json__value {
+  text-decoration: underline;
+}
+
+.json__toggle {
+  display: none;
+}
+.json__toggle:checked ~ .json__item {
+  display: block;
+}
+
+.json__key {
+  color: darkblue;
+  display: inline;
+}
+.json__key::after {
+  content: ": ";
+}
+
+.json__value {
+  display: inline;
+}
+
+.json__value--string {
+  color: green;
+}
+
+.json__value--number {
+  color: blue;
+}
+
+.json__value--boolean {
+  color: red;
+}
+
+
+
+</style>
+    </head>
+    <body onload="onLoad()">
+       
+        <div class="row">        
+                <div id="mainContent" class="column">
+                    <nav class="navbar navbar-light bg-light">
+                        <form class="form-inline">
+                          <button class="btn btn-info" type="button" onclick="onCalculate(this)">Calculate</button>
+                          <input type="checkbox" id="cbPopulateDemoData" onchange="onPopulateDemoData(this)">Populate Demo Data</button>
+                        </form>
+                      </nav>
+                    <div class="row container">
+                        <div class="column">
+                            <div class="formField" >
+                                <label for="txtSchema">Entity Data Schema</label>       
+                                <textarea id="txtSchema" rows="25" cols="50" onchange="onSchemaChange(this)" class="rounded border border-primary"></textarea>
+                                <label id="txtSchemaValidationMsg" for="txtSchema">valid</label>     
+                            </div>
+                        </div>
+                        <div class="column">
+                            <table class="table table-striped table-hover rounded" id="tbSchemaField">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th>Field Name</th>
+                                        <th>Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbSchemaFieldsBody">
+                                </tbody>
+                            </table>  
+                        </div>
+                    </div>                 
+                </div>
+    
+            <div id="payloadContent"class="column">
+                <nav class="navbar navbar-light bg-light">
+                    <form class="form-inline">
+                      <button class="btn btn-outline-info" type="button" onclick="onClickShowModalDialog()"><i class="fa fa-done"></i> Generate schema from payload</button>
+                      <button class="btn btn-outline-success" type="button" onclick=""><i class="fa fa-copy"></i> Format & Copy Payload</button>                     
+                    </form>
+                  </nav>
+                <div class="row">
+                    <div class="column">
+                        <div class="formField" >
+                            <label for="txtPayload">Payload</label>       
+                            <textarea id="txtPayload" rows="25" cols="50"onchange="onPayloadChange(this)" class="rounded border border-primary"></textarea>
+                            <label id="txtPayloadValidationMsg" for="txtPayload">valid</label>     
+                        </div>
+                    </div>
+                    <div class="column">
+                        <table class="table table-striped table-hover rounded" id="tbPayloadField">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th>Field Name</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbPayloadFieldsBody">
+                            </tbody>
+                        </table>    
+                    </div>
+                    
+                </div>   
+                          
+            </div>
+        </div>
+        <div class="jsonPreview rounded border border-primary" id="jsonPreview"></div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label">Recipient:</label>
+                      <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                      <label for="message-text" class="col-form-label">Message:</label>
+                      <textarea class="form-control" id="message-text"></textarea>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Send message</button>
+                </div>
+              </div>
+            </div>
+          </div>          
+    </body>
+</html>
