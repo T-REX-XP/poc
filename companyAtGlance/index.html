@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Adaptive Cards Dashboard</title>
     <meta charset="UTF-8">
@@ -7,12 +8,64 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://unpkg.com/markdown-it/dist/markdown-it.min.js"></script>
     <script src="https://unpkg.com/adaptivecards@latest/dist/adaptivecards.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     <style>
         .card {
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             border: 1px solid #ddd;
             border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease-in-out, max-height 0.3s ease;
+            overflow: hidden;
+            position: relative;
+            /* for positioning the button */
         }
+
+        .card-content {
+            max-height: 250px;
+            /* Adjust as needed */
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .card.expanded .card-content {
+            max-height: 1000px;
+            /* Adjust as needed */
+        }
+
+        .toggle-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            border: none;
+            /* Optional: removes border from the button */
+            background-color: transparent;
+            /* Optional: makes the background transparent */
+            /* text-shadow: #000; */
+        }
+
+        .toggle-button .fas {
+            color: #000;
+            /* Change the color as needed */
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Adjustments for padding and margins */
+        .container-fluid {
+            padding: 20px;
+        }
+
+        .col-md-4 {
+            padding: 10px;
+        }
+
+        /* Bottom bar style adjustments, if needed */
         .bottom-bar {
             position: fixed;
             bottom: 0;
@@ -24,22 +77,51 @@
             display: none;
         }
     </style>
+
+    </style>
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4">
-                <div id="card1" class="card"></div>
-                <div id="card3" class="card"></div>
-                <!-- More cards can be added here in the first column -->
+                <div class="card">
+                    <div class="card-content">
+                        <div id="card1"></div>
+                    </div>
+                    <button class="btn toggle-button">
+                        <i class="fas fa-expand-alt"></i>
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <div id="card3"></div>
+                    </div>
+                    <button class="btn toggle-button">
+                        <i class="fas fa-expand-alt"></i>
+                    </button>
+                </div>
             </div>
             <div class="col-md-4">
-                <div id="card4" class="card"></div>
-                <!-- More cards can be added here in the second column -->
+                <div class="card">
+                    <div class="card-content">
+                        <div id="card4"></div>
+                    </div>
+                    <button class="btn toggle-button">
+                        <i class="fas fa-expand-alt"></i>
+                    </button>
+                </div>
             </div>
             <div class="col-md-4">
-                <div id="card2" class="card"></div>
-                <!-- More cards can be added here in the third column -->
+                <div class="card">
+                    <div class="card-content">
+                        <div id="card2"></div>
+                    </div>
+                    <button class="btn toggle-button">
+                        <i class="fas fa-expand-alt"></i>
+                    </button>
+                </div>
+                <!-- Repeat for other cards -->
             </div>
             <!-- More columns can be added here -->
         </div>
@@ -49,8 +131,7 @@
         <p>Adaptive Cards Version: 1.6</p>
     </div>
     <script src="index.js" type="application/javascript"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
 </body>
+
 </html>

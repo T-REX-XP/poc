@@ -325,7 +325,7 @@ const card1Data =
     ]
 };
 //Recent news
-const card2Data = {
+ const card2Data = {
     "type": "AdaptiveCard",
     "version": "1.6",
     "body": [
@@ -354,14 +354,9 @@ const card2Data = {
                             "wrap": true
                         },
                         {
-                            "type": "ActionSet",
-                            "actions": [
-                                {
-                                    "type": "Action.OpenUrl",
-                                    "title": "Read More",
-                                    "url": "https://www.epirocgroup.com"
-                                }
-                            ]
+                            "type": "TextBlock",
+                            "text": "[Read More](https://www.epirocgroup.com)",
+                            "wrap": true
                         },
                         {
                             "type": "TextBlock",
@@ -375,14 +370,9 @@ const card2Data = {
                             "wrap": true
                         },
                         {
-                            "type": "ActionSet",
-                            "actions": [
-                                {
-                                    "type": "Action.OpenUrl",
-                                    "title": "Read More",
-                                    "url": "https://www.epiroc.com"
-                                }
-                            ]
+                            "type": "TextBlock",
+                            "text": "[Read More](https://www.epiroc.com)",
+                            "wrap": true
                         },
                         {
                             "type": "TextBlock",
@@ -396,14 +386,9 @@ const card2Data = {
                             "wrap": true
                         },
                         {
-                            "type": "ActionSet",
-                            "actions": [
-                                {
-                                    "type": "Action.OpenUrl",
-                                    "title": "Read More",
-                                    "url": "https://www.epirocgroup.com"
-                                }
-                            ]
+                            "type": "TextBlock",
+                            "text": "[Read More](https://www.epirocgroup.com)",
+                            "wrap": true
                         }
                     ]
                 }
@@ -411,6 +396,92 @@ const card2Data = {
         }
     ]
 };
+//{
+//     "type": "AdaptiveCard",
+//     "version": "1.6",
+//     "body": [
+//         {
+//             "type": "TextBlock",
+//             "text": "🗞️ Latest News on Epiroc",
+//             "weight": "Bolder",
+//             "size": "Large"
+//         },
+//         {
+//             "type": "ColumnSet",
+//             "columns": [
+//                 {
+//                     "type": "Column",
+//                     "width": "stretch",
+//                     "items": [
+//                         {
+//                             "type": "TextBlock",
+//                             "text": "Epiroc Interim Report Q3 2023",
+//                             "weight": "Bolder",
+//                             "wrap": true
+//                         },
+//                         {
+//                             "type": "TextBlock",
+//                             "text": "Reports 17% increase in orders, strong demand in mining for automation and connectivity solutions.",
+//                             "wrap": true
+//                         },
+//                         {
+//                             "type": "ActionSet",
+//                             "actions": [
+//                                 {
+//                                     "type": "Action.OpenUrl",
+//                                     "title": "Read More",
+//                                     "url": "https://www.epirocgroup.com"
+//                                 }
+//                             ]
+//                         },
+//                         {
+//                             "type": "TextBlock",
+//                             "text": "Epiroc's Extensive Product Lineup",
+//                             "weight": "Bolder",
+//                             "wrap": true
+//                         },
+//                         {
+//                             "type": "TextBlock",
+//                             "text": "Showcases wide range of drill rigs, loaders, trucks, and rock excavation equipment.",
+//                             "wrap": true
+//                         },
+//                         {
+//                             "type": "ActionSet",
+//                             "actions": [
+//                                 {
+//                                     "type": "Action.OpenUrl",
+//                                     "title": "Read More",
+//                                     "url": "https://www.epiroc.com"
+//                                 }
+//                             ]
+//                         },
+//                         {
+//                             "type": "TextBlock",
+//                             "text": "Epiroc's Corporate Sustainability Initiatives",
+//                             "weight": "Bolder",
+//                             "wrap": true
+//                         },
+//                         {
+//                             "type": "TextBlock",
+//                             "text": "Focus on sustainability, ethical standards, and efficient resource use.",
+//                             "wrap": true
+//                         },
+//                         {
+//                             "type": "ActionSet",
+//                             "actions": [
+//                                 {
+//                                     "type": "Action.OpenUrl",
+//                                     "title": "Read More",
+//                                     "url": "https://www.epirocgroup.com"
+//                                 }
+//                             ]
+//                         }
+//                     ]
+//                 }
+//             ]
+//         }
+//     ]
+// };
 // {
 //     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
 //     "type": "AdaptiveCard",
@@ -769,7 +840,18 @@ const card4Data = {
         "wrap": true
       }
     ]
-  };  
+  }; 
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggleButtons = document.querySelectorAll('.toggle-button');
+
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const card = this.closest('.card');
+            card.classList.toggle('expanded');
+        });
+    });
+});
 
 function renderCard(cardData, containerId) {
     const adaptiveCard = new AdaptiveCards.AdaptiveCard();
